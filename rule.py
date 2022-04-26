@@ -29,27 +29,48 @@ def get_labelled_formula_immediate_children(labelled_formula : LabelledFormula, 
 
 def get_sequent_immediate_children(sequent : Sequent, rule_names):
     # Merge the immediate children
-    immediate_children = {}
+    immediate_children = set()
     
-    for index, antecedent in enumerate(sequent.antecedents):
+    for antecedent in sequent.antecedents:
         antecedent_immediate_children = get_labelled_formula_immediate_children(antecedent, rule_names)
-
-        for immediate_child_text, immediate_child_positions in antecedent_immediate_children.items():
-            if immediate_child_text not in immediate_children:
-                immediate_children[immediate_child_text] = []
-            for start, stop in immediate_child_positions:
-                immediate_children[immediate_child_text].append(('antecedent', index, start, stop))
+        immediate_children |= set(antecedent_immediate_children)
     
-    for index, consequent in enumerate(sequent.consequent):
+    for consequent in sequent.consequents:
         consequent_immediate_children = get_labelled_formula_immediate_children(consequent, rule_names)
-
-        for immediate_child_text, immediate_child_positions in consequent_immediate_children.items():
-            if immediate_child_text not in immediate_children:
-                immediate_children[immediate_child_text] = []
-            for start, stop in immediate_child_positions:
-                immediate_children[immediate_child_text].append(('consequent', index, start, stop))
+        immediate_children |= set(consequent_immediate_children)
 
     return immediate_children
+
+def smart_replace(input, replacement_function, old_list, new_list):
+    assert len(old_list) == len(new_list)
+
+    intermediate_names = ['_' + str(i) + '_' for i in range(len(old_list))]
+
+    for old_name, intermediate_name in zip(old_list, intermediate_names):
+        input = replacement_function(input, old_name, intermediate_name)
+    
+    for intermediate_name, new_name in zip(intermediate_names, new_list):
+        input = replacement_function(input, intermediate_name, new_name)
+    
+    return input
+
+def replace_labels(sequent : Sequent, label_pairing):
+    old_labels = [pair[0] for pair in label_pairing]
+    new_labels = [pair[1] for pair in label_pairing]
+
+    return smart_replace(sequent, lambda input, old, new: input.replace_label(old, new), old_labels, new_labels)
+
+def replace_prop_variables(sequent : Sequent, prop_variable_pairing):
+    old_prop_variables = [pair[0] for pair in prop_variable_pairing]
+    new_prop_variables = [pair[1] for pair in prop_variable_pairing]
+
+    return smart_replace(sequent, lambda input, old, new: input.replace_prop_variable(old, new), old_prop_variables, new_prop_variables)
+
+def replace_semantic_variables(sequent : Sequent, semantic_variable_pairing):
+    old_semantic_variables = [pair[0] for pair in semantic_variable_pairing]
+    new_semantic_variables = [pair[1] for pair in semantic_variable_pairing]
+
+    return smart_replace(sequent, lambda input, old, new: input.replace_semantic_variable(old, new), old_semantic_variables, new_semantic_variables)
 
 class Rule:
     def __init__(self, name, root : Sequent, children : List[Sequent]):
@@ -62,14 +83,20 @@ class Rule:
         known_immediate_children = get_sequent_immediate_children(relevant_sequent, rule_names)
         known_semantic_variables = relevant_sequent.semantic_variables()
 
+        print('Immediate children:', known_immediate_children)
+
         unknown_labels = self.root.labels()
         unknown_prop_variables = self.root.prop_variables()
         unknown_semantic_variables = self.root.semantic_variables()
 
         # Match unknown with known
         label_pairings = utils.get_pairings(unknown_labels, known_labels)
-        prop_variable_pairings = utils.get_pairings(unknown_prop_variables, known_immediate_children.keys())
+        prop_variable_pairings = utils.get_pairings(unknown_prop_variables, known_immediate_children)
         semantic_variable_pairings = utils.get_pairings(unknown_semantic_variables, known_semantic_variables)
+
+        print('==')
+        print(str(relevant_sequent))
+        print('==')
 
         for label_pairing in label_pairings:
             for prop_variable_pairing in prop_variable_pairings:
@@ -77,16 +104,18 @@ class Rule:
                     adapted_root = self.root.clone()
                     adapted_children = [child.clone() for child in self.children]
 
-                    for old_label, new_label in label_pairing:
-                        adapted_root = adapted_root.replace_label(old_label, new_label)
-                        adapted_children = [child.replace_label(old_label, new_label) for child in adapted_children]
-
-                    for old_prop_variable, new_immediate_child in prop_variable_pairing:
-                        adapted_root = adapted_root.replace_prop_variable(old_prop_variable, new_immediate_child)
-                        adapted_children = [child.replace_prop_variable(old_prop_variable, new_immediate_child) for child in adapted_children]
                     
-                    for old_semantic_variable, new_semantic_variable in semantic_variable_pairing:
-                        adapted_root = adapted_root.replace_semantic_variable(old_semantic_variable, new_semantic_variable)
-                        adapted_children = [child.replace_semantic_variable(old_semantic_variable, new_semantic_variable) for child in adapted_children]
+                    adapted_root = replace_labels(adapted_root, label_pairing)
+                    adapted_children = [replace_labels(child, label_pairing) for child in adapted_children]
+
+                    adapted_root = replace_prop_variables(adapted_root, prop_variable_pairing)
+                    adapted_children = [replace_prop_variables(child, prop_variable_pairing) for child in adapted_children]
+
+                    adapted_root = replace_semantic_variables(adapted_root, semantic_variable_pairing)
+                    adapted_children = [replace_semantic_variables(child, semantic_variable_pairing) for child in adapted_children]
+
+                    if str(adapted_root) == str(relevant_sequent):
+                        print('MATCH!')
+
                     print(adapted_root)
                     print(adapted_children)

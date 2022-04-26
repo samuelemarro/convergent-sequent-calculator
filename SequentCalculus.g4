@@ -13,6 +13,7 @@ formula: (
     | '(' formula OR formula ')'
     | '(' formula IMPLIES formula ')'
     | VARIABLE
+    | BOT
 );
 
 antecedent: multiset;
@@ -43,6 +44,7 @@ LABEL: [a-z];
 VARIABLE: [A-Z];
 LPAREN: '(';
 RPAREN: ')';
+BOT: '@';
 
 WS : ' '+ -> skip;
 SKIPPABLE : ('\r' | '\n') -> skip;

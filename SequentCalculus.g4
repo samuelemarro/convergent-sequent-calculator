@@ -1,8 +1,12 @@
 grammar SequentCalculus;
 
-multiset: ( labelledFormula ',' multiset | labelledFormula );
+multiset: ( statement ',' multiset | statement );
 
 labelledFormula: ( LABEL ':' formula);
+
+atom: LABEL RELATION LABEL;
+
+statement: ( labelledFormula | atom );
 
 formula: (
     | '(' formula ')'
@@ -22,17 +26,6 @@ consequent: multiset;
 sequent: ( ARROW | antecedent ARROW | ARROW consequent | antecedent ARROW consequent );
 
 
-/*
-ARROW: '=>';
-AND: ( 'AND' | '/\\' );
-OR: ( 'OR' | '\\/' );
-IMPLIES: ( 'IMPLIES' | '->' );
-NOT: ( 'NOT' | '~');
-BOX: ( 'BOX' | '[]' );
-DIAMOND: ( 'DIAMOND' | '<>' );
-LABEL: [a-z];
-VARIABLE: [A-Z];*/
-
 ARROW: '=';
 AND: '&';
 OR: '|';
@@ -41,10 +34,11 @@ NOT: '!';
 BOX: '°';
 DIAMOND: '^';
 LABEL: [a-z];
-VARIABLE: [A-Z];
+VARIABLE: [A-P|Q-Z];
 LPAREN: '(';
 RPAREN: ')';
 BOT: '@';
+RELATION: '.';
 
 WS : ' '+ -> skip;
 SKIPPABLE : ('\r' | '\n') -> skip;

@@ -1,3 +1,4 @@
+import re
 from typing import List
 
 from antlr4 import CommonTokenStream, ParseTreeWalker, StdinStream, InputStream
@@ -36,3 +37,27 @@ def get_immediate_children(formula : Formula, rule_names : List[str]):
         immediate_children[child_text].append((start, stop))
     
     return [child for child in immediate_children if child not in SKIPPABLE_CHILDREN]
+
+def preprocess(_input):
+    replacements = [
+        ('AND', '&'),
+        ('/\\', '&'),
+        ('OR', '|'),
+        ('\\/', '|'),
+        ('NOT', '!'),
+        ('-', '!'),
+        ('~', '!'),
+        ('IMPLIES', '?'),
+        ('->', '?'),
+        ('BOX', '°'),
+        ('[]', '°'),
+        ('DIAMOND', '^'),
+        ('<>', '^'),
+        ('=>', '=')
+    ]
+
+    for old, new in replacements:
+        _input = _input.replace(old, new)
+    _input = re.sub('\s+', '', _input)
+
+    return _input

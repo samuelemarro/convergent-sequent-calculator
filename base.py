@@ -46,9 +46,29 @@ class Formula:
         return Formula(self.content)
     
     def __str__(self) -> str:
-        return self.content
+        formatted = self.content
+
+        for old, new in self.REPLACEMENTS:
+            formatted = formatted.replace(old, new)
+        return formatted
     
     __repr__ = __str__
+
+    REPLACEMENTS = [
+        ('&', ' ∧ '),
+        ('|', ' ∨'),
+        ('!', ' ¬ '),
+        ('?', ' → '),
+        ('°', ' ◻ '),
+        ('^', ' ◇ ')
+    ]
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Formula):
+            return self.content == other.content
+    
+    def __hash__(self) -> int:
+        return hash(self.content)
 
 class LabelledFormula:
     def __init__(self, label : str, formula : Union[Formula, str]) -> None:
@@ -86,8 +106,22 @@ class LabelledFormula:
     
     __repr__ = __str__
 
+    def __eq__(self, other) -> bool:
+        if isinstance(other, LabelledFormula):
+            return self.label == other.label and self.formula == other.formula
+        return False
+    
+    def __hash__(self) -> int:
+        return hash(self.label) + hash(self.formula)
+
 class Sequent:
-    def __init__(self, antecedents : List[LabelledFormula], consequents : List[LabelledFormula]) -> None:
+    def __init__(self, antecedents : Union[List[LabelledFormula], Set[LabelledFormula]], consequents : Union[List[LabelledFormula], Set[LabelledFormula]]) -> None:
+        if isinstance(antecedents, list):
+            antecedents = set(antecedents)
+        
+        if isinstance(consequents, list):
+            consequents = set(consequents)
+
         self.antecedents = antecedents
         self.consequents = consequents
 
@@ -137,6 +171,11 @@ class Sequent:
         return Sequent(new_antecedents, new_consequents)
 
     def __str__(self) -> str:
-        return ','.join([str(antecedent) for antecedent in self.antecedents]) + '=>' + ','.join([str(consequent) for consequent in self.consequents])
+        return ','.join([str(antecedent) for antecedent in self.antecedents]) + ' ⇒  ' + ','.join([str(consequent) for consequent in self.consequents])
     
     __repr__ = __str__
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Sequent):
+            return self.antecedents == other.antecedents and self.consequents == other.consequents
+        return False

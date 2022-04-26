@@ -53,7 +53,9 @@ def preprocess(_input):
         ('[]', '°'),
         ('DIAMOND', '^'),
         ('<>', '^'),
-        ('=>', '=')
+        ('=>', '='),
+        ('BOT', '@'),
+        ('+', '@')
     ]
 
     for old, new in replacements:

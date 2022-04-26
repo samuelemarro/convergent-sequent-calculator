@@ -11,7 +11,29 @@ from dist.SequentCalculusLexer import SequentCalculusLexer
 from dist.SequentCalculusParser import SequentCalculusParser
 from dist.SequentCalculusListener import SequentCalculusListener
 
-SKIPPABLE_CHILDREN = ['(', ')', '&', '|', '^', '°']
+REPLACEMENTS = [
+    ('AND', '&'),
+    ('/\\', '&'),
+    ('OR', '|'),
+    ('\\/', '|'),
+    ('NOT', '!'),
+    ('-', '!'),
+    ('~', '!'),
+    ('IMPLIES', '?'),
+    ('->', '?'),
+    ('BOX', '°'),
+    ('[]', '°'),
+    ('DIAMOND', '^'),
+    ('<>', '^'),
+    ('=>', '='),
+    ('BOT', '@'),
+    ('+', '@'),
+    ('R', '.'),
+    ('SEES', '.'),
+]
+
+
+SKIPPABLE_CHILDREN = set([p[1] for p in REPLACEMENTS])
 
 def get_immediate_children(formula : Formula, rule_names : List[str]):
     lexer = SequentCalculusLexer(InputStream(formula.content))
@@ -39,26 +61,7 @@ def get_immediate_children(formula : Formula, rule_names : List[str]):
     return [child for child in immediate_children if child not in SKIPPABLE_CHILDREN]
 
 def preprocess(_input):
-    replacements = [
-        ('AND', '&'),
-        ('/\\', '&'),
-        ('OR', '|'),
-        ('\\/', '|'),
-        ('NOT', '!'),
-        ('-', '!'),
-        ('~', '!'),
-        ('IMPLIES', '?'),
-        ('->', '?'),
-        ('BOX', '°'),
-        ('[]', '°'),
-        ('DIAMOND', '^'),
-        ('<>', '^'),
-        ('=>', '='),
-        ('BOT', '@'),
-        ('+', '@')
-    ]
-
-    for old, new in replacements:
+    for old, new in REPLACEMENTS:
         _input = _input.replace(old, new)
     _input = re.sub('\s+', '', _input)
 

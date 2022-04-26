@@ -33,7 +33,7 @@ REPLACEMENTS = [
 ]
 
 
-SKIPPABLE_CHILDREN = set([p[1] for p in REPLACEMENTS])
+SKIPPABLE_CHILDREN = set([p[1] for p in REPLACEMENTS]) | set(['(', ')'])
 
 def get_immediate_children(formula : Formula, rule_names : List[str]):
     lexer = SequentCalculusLexer(InputStream(formula.content))

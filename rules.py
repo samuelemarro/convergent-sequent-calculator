@@ -1,4 +1,4 @@
-from base import Sequent, LabelledFormula
+from base import Atom, Sequent, LabelledFormula
 from parsing import preprocess
 from rule import Rule, ChildSequent, ExtraMultisetType
 
@@ -9,9 +9,15 @@ from rule import Rule, ChildSequent, ExtraMultisetType
 # Root:
 # w:(A ∧ B), Γ ⇒ Δ
 
-INITIAL_SEQUENT = Rule(
-    'Initial',
+INITIAL_SEQUENT_VARIABLE = Rule(
+    'Initial variable',
     Sequent([LabelledFormula('w', 'A')], [LabelledFormula('w', 'A')]),
+    []
+)
+
+INITIAL_SEQUENT_ATOM = Rule(
+    'Initial atom',
+    Sequent([Atom('w', 'u')], [Atom('w', 'u')]),
     []
 )
 

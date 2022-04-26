@@ -35,12 +35,14 @@ def get_sequent_immediate_children(sequent : Sequent, rule_names):
     immediate_children = set()
     
     for antecedent in sequent.antecedents:
-        antecedent_immediate_children = get_labelled_formula_immediate_children(antecedent, rule_names)
-        immediate_children |= set(antecedent_immediate_children)
+        if isinstance(antecedent, LabelledFormula):
+            antecedent_immediate_children = get_labelled_formula_immediate_children(antecedent, rule_names)
+            immediate_children |= set(antecedent_immediate_children)
     
     for consequent in sequent.consequents:
-        consequent_immediate_children = get_labelled_formula_immediate_children(consequent, rule_names)
-        immediate_children |= set(consequent_immediate_children)
+        if isinstance(consequent, LabelledFormula):
+            consequent_immediate_children = get_labelled_formula_immediate_children(consequent, rule_names)
+            immediate_children |= set(consequent_immediate_children)
 
     return immediate_children
 

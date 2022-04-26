@@ -31,7 +31,7 @@ class Formula:
         self.content = content
 
     def prop_variables(self) -> Set[str]:
-        return set(re.findall(r'\b[A-Z]\b', self.content))
+        return set(re.findall(r'\b[A-P|Q-Z]\b', self.content))
 
     def semantic_variables(self) -> Set[str]:
         return set(re.findall(r'\b[a-z]\b', self.content))
@@ -71,7 +71,26 @@ class Formula:
     def __hash__(self) -> int:
         return hash(self.content)
 
-class LabelledFormula:
+class Statement:
+    def prop_variables(self) -> Set[str]:
+        raise NotImplementedError
+    
+    def semantic_variables(self) -> Set[str]:
+        raise NotImplementedError
+    
+    def replace_prop_variable(self, old, new) -> 'Statement':
+        raise NotImplementedError
+
+    def replace_semantic_variable(self, old, new) -> 'Statement':
+        raise NotImplementedError
+
+    def replace_label(self, old, new) -> 'Statement':
+        raise NotImplementedError
+
+    def clone(self) -> 'Statement':
+        raise NotImplementedError
+
+class LabelledFormula(Statement):
     def __init__(self, label : str, formula : Union[Formula, str]) -> None:
         self.label = label
 
@@ -79,6 +98,9 @@ class LabelledFormula:
             formula = Formula(formula)
 
         self.formula = formula
+    
+    def labels(self) -> Set[str]:
+        return set([self.label])
     
     def prop_variables(self) -> Set[str]:
         return self.formula.prop_variables()
@@ -115,19 +137,71 @@ class LabelledFormula:
     def __hash__(self) -> int:
         return hash(self.label) + hash(self.formula)
 
+class Atom(Statement):
+    def __init__(self, label1, label2) -> None:
+        self.label1 = label1
+        self.label2 = label2
+
+    def labels(self) -> Set[str]:
+        return set([self.label1, self.label2])
+
+    def prop_variables(self) -> Set[str]:
+        return set()
+    
+    def semantic_variables(self) -> Set[str]:
+        return set()
+    
+    def replace_prop_variable(self, old, new) -> 'Atom':
+        return self.clone()
+
+    def replace_semantic_variable(self, old, new) -> 'Atom':
+        return self.clone()
+
+    def replace_label(self, old, new) -> 'Atom':
+        if self.label1 == old:
+            new_label1 = new
+        else:
+            new_label1 = self.label1
+
+        if self.label2 == old:
+            new_label2 = new
+        else:
+            new_label2 = self.label2
+
+        return Atom(new_label1, new_label2)
+
+    def clone(self) -> 'Atom':
+        return Atom(self.label1, self.label2)
+    
+    def __str__(self) -> str:
+        return self.label1 + 'R' + self.label2
+    
+    __repr__ = __str__
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Atom):
+            return self.label1 == other.label1 and self.label2 == other.label2
+        return False
+    
+    def __hash__(self) -> int:
+        return hash(self.label1) + hash(self.label2)
+
 class Sequent:
-    def __init__(self, antecedents : Union[List[LabelledFormula], Set[LabelledFormula]], consequents : Union[List[LabelledFormula], Set[LabelledFormula]]) -> None:
-        if isinstance(antecedents, list):
+    def __init__(self, antecedents : Union[List[Statement], Set[Statement]], consequents : Union[List[Statement], Set[Statement]]) -> None:
+        if isinstance(antecedents, list) or isinstance(antecedents, tuple):
             antecedents = set(antecedents)
         
-        if isinstance(consequents, list):
+        if isinstance(consequents, list) or isinstance(consequents, tuple):
             consequents = set(consequents)
 
         self.antecedents = antecedents
         self.consequents = consequents
 
     def labels(self):
-        return set([f.label for f in self.antecedents]) | set([f.label for f in self.consequents])
+        all_labels = set()
+        for statement in self.antecedents | self.consequents:
+            all_labels |= statement.labels()
+        return all_labels
 
     def prop_variables(self):
         all_variables = set()

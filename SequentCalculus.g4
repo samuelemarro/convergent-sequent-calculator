@@ -10,12 +10,12 @@ statement: ( labelledFormula | atom );
 
 formula:
     '(' formula ')'
-    | BOX formula
-    | DIAMOND formula
-    | NOT formula
-    |<assoc=right> formula AND formula
-    |<assoc=right> formula OR formula
-    |<assoc=right> formula IMPLIES formula
+    | <assoc=right> BOX formula
+    | <assoc=right> DIAMOND formula
+    | <assoc=right> NOT formula
+    | <assoc=right> formula AND formula
+    | <assoc=right> formula OR formula
+    | <assoc=right> formula IMPLIES formula
     | VARIABLE
     | BOT
 ;
@@ -31,7 +31,7 @@ AND: '&';
 OR: '|';
 IMPLIES: '?';
 NOT: '!';
-BOX: '°';
+BOX: '#';
 DIAMOND: '^';
 LABEL: [a-z];
 VARIABLE: [A-P|Q-Z];

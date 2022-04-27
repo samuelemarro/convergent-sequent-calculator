@@ -48,8 +48,8 @@ class SequentCalculusParser ( Parser ):
     sharedContextCache = PredictionContextCache()
 
     literalNames = [ "<INVALID>", "','", "':'", "'='", "'&'", "'|'", "'?'", 
-                     "'!'", "'\\u00C2\\u00B0'", "'^'", "<INVALID>", "<INVALID>", 
-                     "'('", "')'", "'@'", "'.'" ]
+                     "'!'", "'#'", "'^'", "<INVALID>", "<INVALID>", "'('", 
+                     "')'", "'@'", "'.'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "ARROW", "AND", 
                       "OR", "IMPLIES", "NOT", "BOX", "DIAMOND", "LABEL", 

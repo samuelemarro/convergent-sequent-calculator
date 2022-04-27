@@ -93,6 +93,22 @@ R_NOT = Rule(
     ]
 )
 
+R_BOX = Rule(
+    'R◻',
+    Sequent([], [LabelledFormula('w', preprocess('(BOX A)'))]),
+    [
+        ChildSequent([Atom('w', 'u')], [LabelledFormula('u', preprocess('A'))], [ExtraMultisetType.GAMMA], [ExtraMultisetType.DELTA])
+    ]
+)
+
+L_DIAMOND = Rule(
+    'L◇',
+    Sequent([LabelledFormula('w', preprocess('(DIAMOND A)'))], []),
+    [
+        ChildSequent([Atom('w', 'u'), LabelledFormula('u', preprocess('A'))], [], [ExtraMultisetType.GAMMA], [ExtraMultisetType.DELTA]),
+    ]
+)
+
 RULES = [
     INITIAL_SEQUENT_VARIABLE,
     INITIAL_SEQUENT_ATOM,
@@ -104,5 +120,7 @@ RULES = [
     L_IMPLIES,
     R_IMPLIES,
     L_NOT,
-    R_NOT
+    R_NOT,
+    R_BOX,
+    L_DIAMOND
 ]

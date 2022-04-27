@@ -10,9 +10,10 @@ from dist.SequentCalculusLexer import SequentCalculusLexer
 from dist.SequentCalculusParser import SequentCalculusParser
 from dist.SequentCalculusListener import SequentCalculusListener
 
-from base import Sequent, LabelledFormula, Formula
-from rule import Rule
+from base import Atom, Sequent, LabelledFormula, Formula
 import parsing
+from rules import RULES
+import solver
 
 
 class TreeConverter(SequentCalculusListener):
@@ -37,6 +38,17 @@ class TreeConverter(SequentCalculusListener):
             self.antecedents.append(labelled_formula)
         else:
             self.consequents.append(labelled_formula)
+    
+    def enterAtom(self, ctx: SequentCalculusParser.AtomContext):
+        label1 = ctx.getChild(0).symbol.text
+        label2 = ctx.getChild(2).symbol.text
+
+        atom = Atom(label1, label2)
+
+        if self.is_antecedent:
+            self.antecedents.append(atom)
+        else:
+            self.consequents.append(atom)
 
 
 def traverse(tree, rule_names, indent = 0):
@@ -82,34 +94,20 @@ def parse_tree_2(tree, rule_names):
         }
 
 
-def preprocess(_input):
-    replacements = [
-        ('AND', '&'),
-        ('/\\', '&'),
-        ('OR', '|'),
-        ('\\/', '|'),
-        ('NOT', '!'),
-        ('-', '!'),
-        ('~', '!'),
-        ('IMPLIES', '?'),
-        ('->', '?'),
-        ('BOX', '°'),
-        ('[]', '°'),
-        ('DIAMOND', '^'),
-        ('<>', '^'),
-        ('=>', '=')
-    ]
 
-    for old, new in replacements:
-        _input = _input.replace(old, new)
-    _input = re.sub('\s+', '', _input)
-
-    return _input
 
 def main():
-    _input = 'w:(A AND B)=>w:A'
+    # _input = 'w:(A AND (B AND C)) =>w:A'
+    #_input = 'w:(A AND B) => w:(A OR B)'
+    # _input = 'w:(A OR (NOT B)) => p:(A OR (NOT B))'
+    # _input = 'w:BOT => p:A'
+    # _input = 'w:p =>w:p'
+    # _input = 'qRp => pRq'
+    # _input = 'wRw => wRw'
+    #_input = 'w:(A IMPLIES B), wRw => w:A'
+    _input = 'w:A, w:(A IMPLIES B) => w:B'
 
-    _input = preprocess(_input)
+    _input = parsing.preprocess(_input)
 
     print(_input)
 
@@ -130,18 +128,26 @@ def main():
 
     sequent = Sequent(printer.antecedents, printer.consequents)
 
-    rule = Rule('LAnd', 
-        Sequent([LabelledFormula('w', preprocess('(A AND B)'))], [LabelledFormula('w', 'A')]),
-        []
-    )
-    print('Prop variables:', rule.root.prop_variables())
-    print('Semantic variables:', rule.root.semantic_variables())
-    print('Labels:', rule.root.labels())
-    print(parsing.get_immediate_children(Formula(preprocess('(A AND (B AND C))')), parser.ruleNames))
+    
+    # print('Prop variables:', rule.root.prop_variables())
+    # print('Semantic variables:', rule.root.semantic_variables())
+    # print('Labels:', rule.root.labels())
+    # print(parsing.get_immediate_children(Formula(preprocess('(A AND (B AND C))')), parser.ruleNames))
 
-    rule.apply_to_relevant_sequent(sequent, parser.ruleNames)
+    proof = solver.solve(sequent, RULES, parser.ruleNames)
+    print(proof)
 
-    print(sequent)
+    counterexample = proof.find_counterexample()
+
+    if counterexample is None:
+        print('Statement is provable.')
+    else:
+        print('Counter-example:')
+        for antecedent in counterexample.antecedents:
+            print('Set ' + str(antecedent) + ' to True')
+        for consequent in counterexample.consequents:
+            print('Set ' +  str(consequent) + ' to False')
+    #print(sequent)
 
 if __name__ == '__main__':
     main()

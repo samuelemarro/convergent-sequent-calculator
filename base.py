@@ -71,6 +71,7 @@ class Formula:
     def __hash__(self) -> int:
         return hash(self.content)
 
+# Superclass for both atoms and labelled formulas
 class Statement:
     def prop_variables(self) -> Set[str]:
         raise NotImplementedError

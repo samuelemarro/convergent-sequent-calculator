@@ -20,6 +20,18 @@ formula:
     | BOT
 ;
 
+bformula: (
+    | '(' formula ')'
+    | BOX formula
+    | DIAMOND formula
+    | NOT formula
+    |<assoc=right> formula AND formula
+    |<assoc=right> formula OR formula
+    |<assoc=right> formula IMPLIES formula
+    | VARIABLE
+    | BOT
+);
+
 antecedent: multiset;
 consequent: multiset;
 

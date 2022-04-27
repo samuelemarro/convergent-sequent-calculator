@@ -15,6 +15,8 @@ import parsing
 from rules import RULES
 import solver
 
+from colors import bcolors
+from printer import print_msg_box
 
 class TreeConverter(SequentCalculusListener):
     def __init__(self):
@@ -93,23 +95,21 @@ def parse_tree_2(tree, rule_names):
             'children' : parsed_children
         }
 
-
-
-
 def main():
-    # _input = 'w:(A AND (B AND C)) =>w:A'
+    #_input = 'w:(A AND (B AND C)) =>w:A'
     #_input = 'w:(A AND B) => w:(A OR B)'
-    # _input = 'w:(A OR (NOT B)) => p:(A OR (NOT B))'
-    # _input = 'w:BOT => p:A'
-    # _input = 'w:p =>w:p'
-    # _input = 'qRp => pRq'
-    # _input = 'wRw => wRw'
+    #_input = 'w:(A OR (NOT B)) => p:(A OR (NOT B))' # not provable
+    #_input = 'w:BOT => p:A'
+    #_input = 'w:p =>w:p'
+    #_input = 'qRp => pRq'
+    #_input = 'wRw => wRw'
     #_input = 'w:(A IMPLIES B), wRw => w:A'
-    _input = 'w:A, w:(A IMPLIES B) => w:B'
+    _input = 'w:A, w:(A IMPLIES ((B AND E) AND (C AND D))) => w:B'
+
+    #print(_input)
 
     _input = parsing.preprocess(_input)
-
-    print(_input)
+    print(bcolors.UNDERLINE + _input + bcolors.ENDC)
 
     lexer = SequentCalculusLexer(InputStream(_input))
     stream = CommonTokenStream(lexer)
@@ -117,9 +117,9 @@ def main():
 
     tree = parser.sequent()
 
-    traverse(tree, parser.ruleNames)
+    # traverse(tree, parser.ruleNames)
 
-    print(parse_tree(tree, parser.ruleNames))
+    # print(parse_tree(tree, parser.ruleNames))
 
     #traverse(tree, parser.ruleNames)
     printer = TreeConverter()
@@ -135,18 +135,23 @@ def main():
     # print(parsing.get_immediate_children(Formula(preprocess('(A AND (B AND C))')), parser.ruleNames))
 
     proof = solver.solve(sequent, RULES, parser.ruleNames)
-    print(proof)
 
     counterexample = proof.find_counterexample()
 
     if counterexample is None:
-        print('Statement is provable.')
+        print(bcolors.OKGREEN + 'Statement is provable.' + bcolors.ENDC + '\n')
     else:
-        print('Counter-example:')
+        print(bcolors.FAIL + 'Statement is not provable.' + bcolors.ENDC + '\n')
+        msg = 'Counter-example: ' + '\n'
         for antecedent in counterexample.antecedents:
-            print('Set ' + str(antecedent) + ' to True')
-        for consequent in counterexample.consequents:
-            print('Set ' +  str(consequent) + ' to False')
+            msg += 'Set ' + str(antecedent) + ' to True' + '\n'
+        for i,consequent in enumerate(counterexample.consequents):
+            msg += 'Set ' + str(consequent) + ' to False' + ('\n' if i < len(counterexample.consequents) - 1 else '')
+        print_msg_box(msg, indent=10)
+        
+
+    print("_____PROOF_____")
+    proof.print(False, "", True)
     #print(sequent)
 
 if __name__ == '__main__':

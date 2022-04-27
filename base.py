@@ -2,7 +2,6 @@ import re
 
 from typing import List, Set, Union
 
-
 """class Rule:
     def name(self):
         return 'Unnamed rule'
@@ -31,7 +30,7 @@ class Formula:
         self.content = content
 
     def prop_variables(self) -> Set[str]:
-        return set(re.findall(r'\b[A-P|Q-Z]\b', self.content))
+        return set(re.findall(r'\b[A-PQ-Z]\b', self.content))
 
     def semantic_variables(self) -> Set[str]:
         return set(re.findall(r'\b[a-z]\b', self.content))
@@ -65,11 +64,38 @@ class Formula:
     ]
 
     def __eq__(self, other: object) -> bool:
+        import parsing
+
+        def is_parentheses_formula(children):
+            return len(children) == 3 and children[0] == '(' and children[2] == ')'
+
         if isinstance(other, Formula):
-            return self.content == other.content
+            self_children = parsing.get_immediate_children_list(self)
+            while is_parentheses_formula(self_children):
+                self_children = parsing.get_immediate_children_list(Formula(self_children[1]))
+
+            other_children = parsing.get_immediate_children_list(other)
+            while is_parentheses_formula(other_children):
+                other_children = parsing.get_immediate_children_list(Formula(other_children[1]))
+
+            if len(self_children) != len(other_children):
+                return False
+
+            for self_child, other_child in zip(self_children, other_children):
+                if len(self_child) == len(other_child) == 1:
+                    # String comparison
+                    if self_child[0] != other_child[0]:
+                        return False
+                else:
+                    # Formula comparison
+                    if Formula(self_child) != Formula(other_child):
+                        return False
+
+            return True
+        return False
     
     def __hash__(self) -> int:
-        return hash(self.content)
+        return hash(self.content.replace('(','').replace(')',''))
 
 # Superclass for both atoms and labelled formulas
 class Statement:

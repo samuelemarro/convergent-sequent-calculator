@@ -10,35 +10,31 @@ else:
 
 def serializedATN():
     return [
-        4,1,17,94,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        4,1,17,81,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,1,0,1,0,1,0,1,0,1,0,3,0,22,8,0,1,1,1,1,1,1,1,1,1,2,1,2,
         1,2,1,2,1,3,1,3,3,3,34,8,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,
-        4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,
-        4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,76,
-        8,4,1,5,1,5,1,6,1,6,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,7,
-        92,8,7,1,7,0,0,8,0,2,4,6,8,10,12,14,0,0,99,0,21,1,0,0,0,2,23,1,0,
-        0,0,4,27,1,0,0,0,6,33,1,0,0,0,8,75,1,0,0,0,10,77,1,0,0,0,12,79,1,
-        0,0,0,14,91,1,0,0,0,16,17,3,6,3,0,17,18,5,1,0,0,18,19,3,0,0,0,19,
-        22,1,0,0,0,20,22,3,6,3,0,21,16,1,0,0,0,21,20,1,0,0,0,22,1,1,0,0,
-        0,23,24,5,10,0,0,24,25,5,2,0,0,25,26,3,8,4,0,26,3,1,0,0,0,27,28,
-        5,10,0,0,28,29,5,15,0,0,29,30,5,10,0,0,30,5,1,0,0,0,31,34,3,2,1,
-        0,32,34,3,4,2,0,33,31,1,0,0,0,33,32,1,0,0,0,34,7,1,0,0,0,35,76,1,
-        0,0,0,36,37,5,12,0,0,37,38,3,8,4,0,38,39,5,13,0,0,39,76,1,0,0,0,
-        40,41,5,12,0,0,41,42,5,8,0,0,42,43,3,8,4,0,43,44,5,13,0,0,44,76,
-        1,0,0,0,45,46,5,12,0,0,46,47,5,9,0,0,47,48,3,8,4,0,48,49,5,13,0,
-        0,49,76,1,0,0,0,50,51,5,12,0,0,51,52,5,7,0,0,52,53,3,8,4,0,53,54,
-        5,13,0,0,54,76,1,0,0,0,55,56,5,12,0,0,56,57,3,8,4,0,57,58,5,4,0,
-        0,58,59,3,8,4,0,59,60,5,13,0,0,60,76,1,0,0,0,61,62,5,12,0,0,62,63,
-        3,8,4,0,63,64,5,5,0,0,64,65,3,8,4,0,65,66,5,13,0,0,66,76,1,0,0,0,
-        67,68,5,12,0,0,68,69,3,8,4,0,69,70,5,6,0,0,70,71,3,8,4,0,71,72,5,
-        13,0,0,72,76,1,0,0,0,73,76,5,11,0,0,74,76,5,14,0,0,75,35,1,0,0,0,
-        75,36,1,0,0,0,75,40,1,0,0,0,75,45,1,0,0,0,75,50,1,0,0,0,75,55,1,
-        0,0,0,75,61,1,0,0,0,75,67,1,0,0,0,75,73,1,0,0,0,75,74,1,0,0,0,76,
-        9,1,0,0,0,77,78,3,0,0,0,78,11,1,0,0,0,79,80,3,0,0,0,80,13,1,0,0,
-        0,81,92,5,3,0,0,82,83,3,10,5,0,83,84,5,3,0,0,84,92,1,0,0,0,85,86,
-        5,3,0,0,86,92,3,12,6,0,87,88,3,10,5,0,88,89,5,3,0,0,89,90,3,12,6,
-        0,90,92,1,0,0,0,91,81,1,0,0,0,91,82,1,0,0,0,91,85,1,0,0,0,91,87,
-        1,0,0,0,92,15,1,0,0,0,4,21,33,75,91
+        4,1,4,1,4,1,4,3,4,49,8,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,5,4,
+        60,8,4,10,4,12,4,63,9,4,1,5,1,5,1,6,1,6,1,7,1,7,1,7,1,7,1,7,1,7,
+        1,7,1,7,1,7,1,7,3,7,79,8,7,1,7,0,1,8,8,0,2,4,6,8,10,12,14,0,0,85,
+        0,21,1,0,0,0,2,23,1,0,0,0,4,27,1,0,0,0,6,33,1,0,0,0,8,48,1,0,0,0,
+        10,64,1,0,0,0,12,66,1,0,0,0,14,78,1,0,0,0,16,17,3,6,3,0,17,18,5,
+        1,0,0,18,19,3,0,0,0,19,22,1,0,0,0,20,22,3,6,3,0,21,16,1,0,0,0,21,
+        20,1,0,0,0,22,1,1,0,0,0,23,24,5,10,0,0,24,25,5,2,0,0,25,26,3,8,4,
+        0,26,3,1,0,0,0,27,28,5,10,0,0,28,29,5,15,0,0,29,30,5,10,0,0,30,5,
+        1,0,0,0,31,34,3,2,1,0,32,34,3,4,2,0,33,31,1,0,0,0,33,32,1,0,0,0,
+        34,7,1,0,0,0,35,36,6,4,-1,0,36,37,5,12,0,0,37,38,3,8,4,0,38,39,5,
+        13,0,0,39,49,1,0,0,0,40,41,5,8,0,0,41,49,3,8,4,8,42,43,5,9,0,0,43,
+        49,3,8,4,7,44,45,5,7,0,0,45,49,3,8,4,6,46,49,5,11,0,0,47,49,5,14,
+        0,0,48,35,1,0,0,0,48,40,1,0,0,0,48,42,1,0,0,0,48,44,1,0,0,0,48,46,
+        1,0,0,0,48,47,1,0,0,0,49,61,1,0,0,0,50,51,10,5,0,0,51,52,5,4,0,0,
+        52,60,3,8,4,5,53,54,10,4,0,0,54,55,5,5,0,0,55,60,3,8,4,4,56,57,10,
+        3,0,0,57,58,5,6,0,0,58,60,3,8,4,3,59,50,1,0,0,0,59,53,1,0,0,0,59,
+        56,1,0,0,0,60,63,1,0,0,0,61,59,1,0,0,0,61,62,1,0,0,0,62,9,1,0,0,
+        0,63,61,1,0,0,0,64,65,3,0,0,0,65,11,1,0,0,0,66,67,3,0,0,0,67,13,
+        1,0,0,0,68,79,5,3,0,0,69,70,3,10,5,0,70,71,5,3,0,0,71,79,1,0,0,0,
+        72,73,5,3,0,0,73,79,3,12,6,0,74,75,3,10,5,0,75,76,5,3,0,0,76,77,
+        3,12,6,0,77,79,1,0,0,0,78,68,1,0,0,0,78,69,1,0,0,0,78,72,1,0,0,0,
+        78,74,1,0,0,0,79,15,1,0,0,0,6,21,33,48,59,61,78
     ]
 
 class SequentCalculusParser ( Parser ):
@@ -213,7 +209,7 @@ class SequentCalculusParser ( Parser ):
             self.state = 24
             self.match(SequentCalculusParser.T__1)
             self.state = 25
-            self.formula()
+            self.formula(0)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -373,6 +369,12 @@ class SequentCalculusParser ( Parser ):
         def NOT(self):
             return self.getToken(SequentCalculusParser.NOT, 0)
 
+        def VARIABLE(self):
+            return self.getToken(SequentCalculusParser.VARIABLE, 0)
+
+        def BOT(self):
+            return self.getToken(SequentCalculusParser.BOT, 0)
+
         def AND(self):
             return self.getToken(SequentCalculusParser.AND, 0)
 
@@ -381,12 +383,6 @@ class SequentCalculusParser ( Parser ):
 
         def IMPLIES(self):
             return self.getToken(SequentCalculusParser.IMPLIES, 0)
-
-        def VARIABLE(self):
-            return self.getToken(SequentCalculusParser.VARIABLE, 0)
-
-        def BOT(self):
-            return self.getToken(SequentCalculusParser.BOT, 0)
 
         def getRuleIndex(self):
             return SequentCalculusParser.RULE_formula
@@ -407,117 +403,117 @@ class SequentCalculusParser ( Parser ):
 
 
 
-
-    def formula(self):
-
-        localctx = SequentCalculusParser.FormulaContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 8, self.RULE_formula)
+    def formula(self, _p:int=0):
+        _parentctx = self._ctx
+        _parentState = self.state
+        localctx = SequentCalculusParser.FormulaContext(self, self._ctx, _parentState)
+        _prevctx = localctx
+        _startState = 8
+        self.enterRecursionRule(localctx, 8, self.RULE_formula, _p)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 75
+            self.state = 48
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,2,self._ctx)
-            if la_ == 1:
-                pass
-
-            elif la_ == 2:
+            token = self._input.LA(1)
+            if token in [SequentCalculusParser.LPAREN]:
                 self.state = 36
                 self.match(SequentCalculusParser.LPAREN)
                 self.state = 37
-                self.formula()
+                self.formula(0)
                 self.state = 38
                 self.match(SequentCalculusParser.RPAREN)
                 pass
-
-            elif la_ == 3:
+            elif token in [SequentCalculusParser.BOX]:
                 self.state = 40
-                self.match(SequentCalculusParser.LPAREN)
-                self.state = 41
                 self.match(SequentCalculusParser.BOX)
+                self.state = 41
+                self.formula(8)
+                pass
+            elif token in [SequentCalculusParser.DIAMOND]:
                 self.state = 42
-                self.formula()
-                self.state = 43
-                self.match(SequentCalculusParser.RPAREN)
-                pass
-
-            elif la_ == 4:
-                self.state = 45
-                self.match(SequentCalculusParser.LPAREN)
-                self.state = 46
                 self.match(SequentCalculusParser.DIAMOND)
-                self.state = 47
-                self.formula()
-                self.state = 48
-                self.match(SequentCalculusParser.RPAREN)
+                self.state = 43
+                self.formula(7)
                 pass
-
-            elif la_ == 5:
-                self.state = 50
-                self.match(SequentCalculusParser.LPAREN)
-                self.state = 51
+            elif token in [SequentCalculusParser.NOT]:
+                self.state = 44
                 self.match(SequentCalculusParser.NOT)
-                self.state = 52
-                self.formula()
-                self.state = 53
-                self.match(SequentCalculusParser.RPAREN)
+                self.state = 45
+                self.formula(6)
                 pass
-
-            elif la_ == 6:
-                self.state = 55
-                self.match(SequentCalculusParser.LPAREN)
-                self.state = 56
-                self.formula()
-                self.state = 57
-                self.match(SequentCalculusParser.AND)
-                self.state = 58
-                self.formula()
-                self.state = 59
-                self.match(SequentCalculusParser.RPAREN)
-                pass
-
-            elif la_ == 7:
-                self.state = 61
-                self.match(SequentCalculusParser.LPAREN)
-                self.state = 62
-                self.formula()
-                self.state = 63
-                self.match(SequentCalculusParser.OR)
-                self.state = 64
-                self.formula()
-                self.state = 65
-                self.match(SequentCalculusParser.RPAREN)
-                pass
-
-            elif la_ == 8:
-                self.state = 67
-                self.match(SequentCalculusParser.LPAREN)
-                self.state = 68
-                self.formula()
-                self.state = 69
-                self.match(SequentCalculusParser.IMPLIES)
-                self.state = 70
-                self.formula()
-                self.state = 71
-                self.match(SequentCalculusParser.RPAREN)
-                pass
-
-            elif la_ == 9:
-                self.state = 73
+            elif token in [SequentCalculusParser.VARIABLE]:
+                self.state = 46
                 self.match(SequentCalculusParser.VARIABLE)
                 pass
-
-            elif la_ == 10:
-                self.state = 74
+            elif token in [SequentCalculusParser.BOT]:
+                self.state = 47
                 self.match(SequentCalculusParser.BOT)
                 pass
+            else:
+                raise NoViableAltException(self)
 
+            self._ctx.stop = self._input.LT(-1)
+            self.state = 61
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,4,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
+                    if self._parseListeners is not None:
+                        self.triggerExitRuleEvent()
+                    _prevctx = localctx
+                    self.state = 59
+                    self._errHandler.sync(self)
+                    la_ = self._interp.adaptivePredict(self._input,3,self._ctx)
+                    if la_ == 1:
+                        localctx = SequentCalculusParser.FormulaContext(self, _parentctx, _parentState)
+                        self.pushNewRecursionContext(localctx, _startState, self.RULE_formula)
+                        self.state = 50
+                        if not self.precpred(self._ctx, 5):
+                            from antlr4.error.Errors import FailedPredicateException
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
+                        self.state = 51
+                        self.match(SequentCalculusParser.AND)
+                        self.state = 52
+                        self.formula(5)
+                        pass
+
+                    elif la_ == 2:
+                        localctx = SequentCalculusParser.FormulaContext(self, _parentctx, _parentState)
+                        self.pushNewRecursionContext(localctx, _startState, self.RULE_formula)
+                        self.state = 53
+                        if not self.precpred(self._ctx, 4):
+                            from antlr4.error.Errors import FailedPredicateException
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 4)")
+                        self.state = 54
+                        self.match(SequentCalculusParser.OR)
+                        self.state = 55
+                        self.formula(4)
+                        pass
+
+                    elif la_ == 3:
+                        localctx = SequentCalculusParser.FormulaContext(self, _parentctx, _parentState)
+                        self.pushNewRecursionContext(localctx, _startState, self.RULE_formula)
+                        self.state = 56
+                        if not self.precpred(self._ctx, 3):
+                            from antlr4.error.Errors import FailedPredicateException
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
+                        self.state = 57
+                        self.match(SequentCalculusParser.IMPLIES)
+                        self.state = 58
+                        self.formula(3)
+                        pass
+
+             
+                self.state = 63
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,4,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
             self._errHandler.recover(self, re)
         finally:
-            self.exitRule()
+            self.unrollRecursionContexts(_parentctx)
         return localctx
 
 
@@ -558,7 +554,7 @@ class SequentCalculusParser ( Parser ):
         self.enterRule(localctx, 10, self.RULE_antecedent)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 77
+            self.state = 64
             self.multiset()
         except RecognitionException as re:
             localctx.exception = re
@@ -606,7 +602,7 @@ class SequentCalculusParser ( Parser ):
         self.enterRule(localctx, 12, self.RULE_consequent)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 79
+            self.state = 66
             self.multiset()
         except RecognitionException as re:
             localctx.exception = re
@@ -661,34 +657,34 @@ class SequentCalculusParser ( Parser ):
         self.enterRule(localctx, 14, self.RULE_sequent)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 91
+            self.state = 78
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,3,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,5,self._ctx)
             if la_ == 1:
-                self.state = 81
+                self.state = 68
                 self.match(SequentCalculusParser.ARROW)
                 pass
 
             elif la_ == 2:
-                self.state = 82
+                self.state = 69
                 self.antecedent()
-                self.state = 83
+                self.state = 70
                 self.match(SequentCalculusParser.ARROW)
                 pass
 
             elif la_ == 3:
-                self.state = 85
+                self.state = 72
                 self.match(SequentCalculusParser.ARROW)
-                self.state = 86
+                self.state = 73
                 self.consequent()
                 pass
 
             elif la_ == 4:
-                self.state = 87
+                self.state = 74
                 self.antecedent()
-                self.state = 88
+                self.state = 75
                 self.match(SequentCalculusParser.ARROW)
-                self.state = 89
+                self.state = 76
                 self.consequent()
                 pass
 
@@ -701,6 +697,30 @@ class SequentCalculusParser ( Parser ):
             self.exitRule()
         return localctx
 
+
+
+    def sempred(self, localctx:RuleContext, ruleIndex:int, predIndex:int):
+        if self._predicates == None:
+            self._predicates = dict()
+        self._predicates[4] = self.formula_sempred
+        pred = self._predicates.get(ruleIndex, None)
+        if pred is None:
+            raise Exception("No predicate with index:" + str(ruleIndex))
+        else:
+            return pred(localctx, predIndex)
+
+    def formula_sempred(self, localctx:FormulaContext, predIndex:int):
+            if predIndex == 0:
+                return self.precpred(self._ctx, 5)
+         
+
+            if predIndex == 1:
+                return self.precpred(self._ctx, 4)
+         
+
+            if predIndex == 2:
+                return self.precpred(self._ctx, 3)
+         
 
 
 

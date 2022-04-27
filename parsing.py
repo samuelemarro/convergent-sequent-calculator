@@ -35,7 +35,7 @@ REPLACEMENTS = [
 
 SKIPPABLE_CHILDREN = set([p[1] for p in REPLACEMENTS]) | set(['(', ')'])
 
-def get_immediate_children(formula : Formula, rule_names : List[str]):
+def get_immediate_children_set(formula : Formula, skip_children : set = SKIPPABLE_CHILDREN):
     lexer = SequentCalculusLexer(InputStream(formula.content))
     stream = CommonTokenStream(lexer)
     parser = SequentCalculusParser(stream)
@@ -46,6 +46,9 @@ def get_immediate_children(formula : Formula, rule_names : List[str]):
     #    valid_children = [child for child in tree.getChildren() if not isinstance(child, TerminalNodeImpl)]
     #    assert len(valid_children) == 1
     #    tree = valid_children[0]
+
+    while tree.children[0].getText() == '(':
+        tree = tree.children[1]
 
     immediate_children = dict()
 
@@ -59,6 +62,15 @@ def get_immediate_children(formula : Formula, rule_names : List[str]):
         immediate_children[child_text].append((start, stop))
     
     return [child for child in immediate_children if child not in SKIPPABLE_CHILDREN]
+
+def get_immediate_children_list(formula : Formula):
+    lexer = SequentCalculusLexer(InputStream(formula.content))
+    stream = CommonTokenStream(lexer)
+    parser = SequentCalculusParser(stream)
+
+    tree = parser.formula()
+
+    return [child.getText() for child in tree.children]
 
 def preprocess(_input):
     for old, new in REPLACEMENTS:

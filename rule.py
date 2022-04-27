@@ -1,5 +1,4 @@
-import re
-from typing import Dict, List, Set, Tuple, Union
+from typing import List, Set, Tuple, Union
 
 from enum import Enum
 
@@ -28,7 +27,7 @@ def replace_sequent_children(sequent : Sequent, multiset: str, index : int, star
     return Sequent(new_antecedents, new_consequents)
 
 def get_labelled_formula_immediate_children(labelled_formula : LabelledFormula, rule_names: List[str]):
-    return parsing.get_immediate_children(labelled_formula.formula, rule_names)
+    return parsing.get_immediate_children_set(labelled_formula.formula, rule_names)
 
 def get_sequent_immediate_children(sequent : Sequent, rule_names):
     # Merge the immediate children
@@ -136,6 +135,35 @@ class ChildSequent(Sequent):
     def as_sequent(self) -> Sequent:
         return Sequent(self.antecedents, self.consequents)
 
+# w:(A OR B), Gamma => Delta
+# Figli: A, Gamma => Delta
+#        B, Gamma => Delta
+
+# v:(C OR (D AND E)), v:F => v:D
+##### v:(C OR (D AND E)) => 
+# v:F =>
+
+# Etichette della regola: {w}
+# Etichette del caso specifico: {v}
+# Metavariabili semantiche della regola: {}
+# Metavariabili semantiche del caso specifico: {}
+# Variabili proposizionali della regola: {A, B}
+# Figli diretti del caso specifico: {C, (D AND E)}
+
+# A = C, B = C
+# A = C, B = (D AND E)
+# A = (D AND E), B = C
+# A = (D AND E), B = (D AND E)
+
+# v:(C OR C) =>
+#### v:(C OR (D AND E)) =>
+# v:((D AND E) OR C) =>
+
+
+# v:C, Gamma => Delta
+# v:(D AND E), Gamma => Delta
+
+
 class Rule:
     def __init__(self, name, root : Sequent, children : List[ChildSequent]):
         self.name = name
@@ -175,8 +203,7 @@ class Rule:
                     return root, [child.as_sequent() for child in final_children]
                     
 
-
-    def apply_specific(self, specific_sequent : Sequent, rule_names : List[str]) -> Tuple[Sequent, List[ChildSequent]]:
+    def apply_specific(self, specific_sequent : Sequent, rule_names : List[str]) -> List[Tuple[Sequent, List[ChildSequent]]]:
         known_labels = specific_sequent.labels()
         known_immediate_children = get_sequent_immediate_children(specific_sequent, rule_names)
         known_semantic_variables = specific_sequent.semantic_variables()
@@ -213,7 +240,7 @@ class Rule:
                     adapted_root = replace_semantic_variables(adapted_root, semantic_variable_pairing)
                     adapted_children = [replace_semantic_variables(child, semantic_variable_pairing) for child in adapted_children]
 
-                    if str(adapted_root) == str(specific_sequent):
+                    if adapted_root == specific_sequent:
                         # print('MATCH!')
                         matches.append((adapted_root, adapted_children))
 

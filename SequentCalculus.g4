@@ -8,17 +8,17 @@ atom: LABEL RELATION LABEL;
 
 statement: ( labelledFormula | atom );
 
-formula: (
-    | '(' formula ')'
-    | '(' BOX formula ')'
-    | '(' DIAMOND formula ')'
-    | '(' NOT formula ')'
-    | '(' formula AND formula ')'
-    | '(' formula OR formula ')'
-    | '(' formula IMPLIES formula ')'
+formula:
+    '(' formula ')'
+    | BOX formula
+    | DIAMOND formula
+    | NOT formula
+    |<assoc=right> formula AND formula
+    |<assoc=right> formula OR formula
+    |<assoc=right> formula IMPLIES formula
     | VARIABLE
     | BOT
-);
+;
 
 antecedent: multiset;
 consequent: multiset;

@@ -87,6 +87,9 @@ class Formula:
                     # String comparison
                     if self_child[0] != other_child[0]:
                         return False
+                elif self_child[0] == '_' == other_child[0] == '_' and self_child[len(self_child) - 1] == other_child[len(other_child) - 1] == '_' and len(self_child) == len(other_child):
+                    # Substitution identifier
+                    return self_child == other_child
                 else:
                     # Formula comparison
                     if Formula(self_child) != Formula(other_child):

@@ -18,6 +18,7 @@ formula:
     | <assoc=right> formula IMPLIES formula
     | VARIABLE
     | BOT
+    | INTERMEDIATE_REPLACEMENT_ID
 ;
 
 antecedent: multiset;
@@ -39,6 +40,7 @@ LPAREN: '(';
 RPAREN: ')';
 BOT: '@';
 RELATION: '.';
+INTERMEDIATE_REPLACEMENT_ID: '_' [0-9]+ '_';
 
 WS : ' '+ -> skip;
 SKIPPABLE : ('\r' | '\n') -> skip;

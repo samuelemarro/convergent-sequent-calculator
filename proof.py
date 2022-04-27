@@ -20,7 +20,7 @@ class Node:
     def print(self, is_last, indent = "", is_root = False):
         kids = self.children
         item = ''
-        if self.rule_name == 'N/A':
+        if self.rule_name in ['N/A', 'Loop']:
             item = bcolors.FAIL + str(self.element) + bcolors.ENDC
         else:
             for i,antecedent in enumerate(self.element.antecedents):
@@ -53,7 +53,7 @@ class Node:
                 child.print(False, indent, False)
     
     def find_counterexample(self):
-        if self.rule_name == 'N/A':
+        if self.rule_name in ['N/A', 'Loop']:
             return self.element
         else:
             for child in self.children:

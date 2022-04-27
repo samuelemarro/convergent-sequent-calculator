@@ -57,7 +57,7 @@ class Formula:
     REPLACEMENTS = [
         ('&', ' ∧ '),
         ('|', ' ∨ '),
-        ('!', ' ¬ '),
+        ('!', '¬'),
         ('?', ' → '),
         ('#', '◻'),
         ('^', '◇'),
@@ -274,7 +274,7 @@ class Sequent:
         return Sequent(new_antecedents, new_consequents)
 
     def __str__(self) -> str:
-        return ','.join([str(antecedent) for antecedent in self.antecedents]) + ' ⇒  ' + ','.join([str(consequent) for consequent in self.consequents])
+        return ', '.join([str(antecedent) for antecedent in self.antecedents]) + ' ⇒ ' + ', '.join([str(consequent) for consequent in self.consequents])
     
     __repr__ = __str__
 

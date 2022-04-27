@@ -11,7 +11,7 @@ def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : 
         for rule in rule_set:
             result = rule.apply(sequent, rule_names)
             if result is not None:
-                _, children = result
+                main_sequent, children = result
 
                 # Make the current rule the last one
                 new_rule_set = list(rule_set)
@@ -22,5 +22,5 @@ def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : 
                 new_rules = list(rules)
                 new_rules[i] = new_rule_set
 
-                return Node(sequent, rule.name, [solve(child, new_rules, rule_names) for child in children])
+                return Node(sequent, rule.name, [solve(child, new_rules, rule_names) for child in children], main_sequent)
     return Node(sequent, 'N/A', [])

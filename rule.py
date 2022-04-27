@@ -163,14 +163,15 @@ class ChildSequent(Sequent):
 # v:C, Gamma => Delta
 # v:(D AND E), Gamma => Delta
 
-ALL_VARIABLES = list(string.ascii_uppercase)
+ALL_PROP_VARIABLES = list(string.ascii_uppercase)
+ALL_SEMANTIC_VARIABLES = list(string.ascii_lowercase)
 
-def get_fresh_prop_variables(n : int, existing_variables : Iterable[str]):
+def get_fresh(n : int, fresh_variables : List[str], existing_variables : Iterable[str]):
     if n == 0:
         return []
 
     variables = []
-    for variable in ALL_VARIABLES:
+    for variable in fresh_variables:
         if variable not in existing_variables:
             variables.append(variable)
             if len(variables) == n:
@@ -178,6 +179,12 @@ def get_fresh_prop_variables(n : int, existing_variables : Iterable[str]):
     if len(variables) < n:
         raise Exception('Not enough variables')
     return variables
+
+def get_fresh_prop_variables(n : int, existing_variables : Iterable[str]):
+    return get_fresh(n, ALL_PROP_VARIABLES, existing_variables)
+
+def get_fresh_semantic_variables(n : int, existing_variables : Iterable[str]):
+    return get_fresh(n, ALL_SEMANTIC_VARIABLES, existing_variables)
 
 class Rule:
     def __init__(self, name, root : Sequent, children : List[ChildSequent] = None):
@@ -195,6 +202,14 @@ class Rule:
             children_variables |= child.prop_variables()
 
         return children_variables - self.root.prop_variables()
+
+    @property
+    def fresh_semantic_variables(self):
+        children_variables = set()
+        for child in self.children:
+            children_variables |= child.semantic_variables()
+
+        return children_variables - self.root.semantic_variables()
 
     def apply(self, current_root : Sequent, rule_names : List[str]):
         matching_antecedent_sets = [s for s in utils.powerset(current_root.antecedents, True) if len(s) == len(self.root.antecedents)]
@@ -252,6 +267,12 @@ class Rule:
         new_prop_variables = get_fresh_prop_variables(len(self.fresh_prop_variables), stale_prop_variables)
         fresh_prop_variable_pairing = [(unknown_fresh_prop_variable, new_prop_variable) for unknown_fresh_prop_variable, new_prop_variable in zip(self.fresh_prop_variables, new_prop_variables)]
         rule_children = [replace_prop_variables(child, fresh_prop_variable_pairing) for child in rule_children]
+
+        # Handle fresh semantic variables
+        stale_semantic_variables = unknown_semantic_variables | full_sequent.semantic_variables()
+        new_semantic_variables = get_fresh_semantic_variables(len(self.fresh_semantic_variables), stale_semantic_variables)
+        fresh_semantic_variable_pairing = [(unknown_fresh_semantic_variable, new_semantic_variable) for unknown_fresh_semantic_variable, new_semantic_variable in zip(self.fresh_semantic_variables, new_semantic_variables)]
+        rule_children = [replace_semantic_variables(child, fresh_semantic_variable_pairing) for child in rule_children]
 
         # print('==')
         # print(str(specific_sequent))

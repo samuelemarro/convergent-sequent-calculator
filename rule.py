@@ -247,13 +247,13 @@ class Rule:
 
                     for child in children:
                         if ExtraMultisetType.GAMMA in child.extra_antecedents:
-                            child.antecedents |= gamma
+                            child.antecedents = child.antecedents.combine(gamma)
                         if ExtraMultisetType.DELTA in child.extra_antecedents:
-                            child.antecedents |= delta
+                            child.antecedents = child.antecedents.combine(delta)
                         if ExtraMultisetType.GAMMA in child.extra_consequents:
-                            child.consequents |= gamma
+                            child.consequents = child.consequents.combine(gamma)
                         if ExtraMultisetType.DELTA in child.extra_consequents:
-                            child.consequents |= delta
+                            child.consequents = child.consequents.combine(delta)
                         
                         final_children.append(child)
                     

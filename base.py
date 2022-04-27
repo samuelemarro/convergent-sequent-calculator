@@ -1,4 +1,5 @@
 import re
+from multiset import Multiset
 
 from typing import List, Set, Union
 
@@ -214,12 +215,12 @@ class Atom(Statement):
         return hash(self.label1) + hash(self.label2)
 
 class Sequent:
-    def __init__(self, antecedents : Union[List[Statement], Set[Statement]], consequents : Union[List[Statement], Set[Statement]]) -> None:
-        if isinstance(antecedents, list) or isinstance(antecedents, tuple):
-            antecedents = set(antecedents)
+    def __init__(self, antecedents : Union[List[Statement], Set[Statement], Multiset], consequents : Union[List[Statement], Set[Statement], Multiset]) -> None:
+        if isinstance(antecedents, list) or isinstance(antecedents, tuple) or isinstance(antecedents, set):
+            antecedents = Multiset(antecedents)
         
-        if isinstance(consequents, list) or isinstance(consequents, tuple):
-            consequents = set(consequents)
+        if isinstance(consequents, list) or isinstance(consequents, tuple) or isinstance(antecedents, set):
+            consequents = Multiset(consequents)
 
         self.antecedents = antecedents
         self.consequents = consequents

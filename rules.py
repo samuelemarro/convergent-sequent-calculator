@@ -94,7 +94,8 @@ R_NOT = Rule(
 )
 
 RULES = [
-    INITIAL_SEQUENT,
+    INITIAL_SEQUENT_VARIABLE,
+    INITIAL_SEQUENT_ATOM,
     L_BOT,
     L_AND,
     R_AND,

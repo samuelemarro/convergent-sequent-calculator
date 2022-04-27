@@ -163,8 +163,13 @@ class ChildSequent(Sequent):
 # v:C, Gamma => Delta
 # v:(D AND E), Gamma => Delta
 
-ALL_PROP_VARIABLES = list(string.ascii_uppercase)
-ALL_SEMANTIC_VARIABLES = list(string.ascii_lowercase)
+def reorder(sequence : list, first):
+    i = sequence.index(first)
+    return sequence[i:] + sequence[:i]
+
+ALL_PROP_VARIABLES = string.ascii_uppercase
+ALL_SEMANTIC_VARIABLES = reorder(string.ascii_lowercase, 'p')
+ALL_LABELS = 'wvutsxyzabcdefghijklmnopqr'
 
 def get_fresh(n : int, fresh_variables : List[str], existing_variables : Iterable[str]):
     if n == 0:
@@ -185,6 +190,9 @@ def get_fresh_prop_variables(n : int, existing_variables : Iterable[str]):
 
 def get_fresh_semantic_variables(n : int, existing_variables : Iterable[str]):
     return get_fresh(n, ALL_SEMANTIC_VARIABLES, existing_variables)
+
+def get_fresh_labels(n : int, existing_labels : Iterable[str]):
+    return get_fresh(n, ALL_LABELS, existing_labels)
 
 class Rule:
     def __init__(self, name, root : Sequent, children : List[ChildSequent] = None):
@@ -210,6 +218,14 @@ class Rule:
             children_variables |= child.semantic_variables()
 
         return children_variables - self.root.semantic_variables()
+
+    @property
+    def fresh_labels(self):
+        children_labels = set()
+        for child in self.children:
+            children_labels |= child.labels()
+
+        return children_labels - self.root.labels()
 
     def apply(self, current_root : Sequent, rule_names : List[str]):
         matching_antecedent_sets = [s for s in utils.powerset(current_root.antecedents, True) if len(s) == len(self.root.antecedents)]
@@ -273,6 +289,12 @@ class Rule:
         new_semantic_variables = get_fresh_semantic_variables(len(self.fresh_semantic_variables), stale_semantic_variables)
         fresh_semantic_variable_pairing = [(unknown_fresh_semantic_variable, new_semantic_variable) for unknown_fresh_semantic_variable, new_semantic_variable in zip(self.fresh_semantic_variables, new_semantic_variables)]
         rule_children = [replace_semantic_variables(child, fresh_semantic_variable_pairing) for child in rule_children]
+
+        # Handle fresh labels
+        stale_labels = unknown_labels | full_sequent.labels()
+        new_labels = get_fresh_labels(len(self.fresh_labels), stale_labels)
+        fresh_label_pairing = [(unknown_fresh_label, new_label) for unknown_fresh_label, new_label in zip(self.fresh_labels, new_labels)]
+        rule_children = [replace_labels(child, fresh_label_pairing) for child in rule_children]
 
         # print('==')
         # print(str(specific_sequent))

@@ -324,17 +324,8 @@ class Rule:
                     # print(adapted_root)
                     # print(adapted_children)
         return matches
-
-# xRy, yRx, aRb, bRa [w/x][v/y][w/a][v/b]
-# xRy, yRx -> wRv, vRw
-# aRb, bRa -> wRv, vRw
-
-# (w) -> fresche diverse ---- (v) -> fresche diverse
-# w:A, w:B, v:A, v:B [x/w][x/v]
-# w:A, w:B -> x:A, x:B
-# v:A, v:B -> x:A, x:B
-
-# (x,y) -> fresche diverse ---- (y,x) -> fresche diverse
-# xRy, yRx [w/x][v/y]
-# xRy -> wRv
-# yRx -> vRw
+    
+    def __str__(self) -> str:
+        return 'Rule(' + self.name + ')'
+    
+    __repr__ = __str__

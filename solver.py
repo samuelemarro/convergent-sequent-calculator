@@ -35,4 +35,4 @@ def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : 
                 new_rules[i] = new_rule_set
 
                 return Node(sequent, rule.name, [solve(child, new_rules, rule_names, previous_sequents + [sequent]) for child in children], main_sequent)
-    return Node(sequent, 'N/A', [], main_sequent)
+    return Node(sequent, 'N/A', [], Sequent([], []))

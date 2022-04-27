@@ -1,7 +1,7 @@
-from typing import List, Set, Tuple, Union
+from typing import Iterable, List, Set, Tuple, Union
 
 from enum import Enum
-
+import string
 
 from base import Formula, LabelledFormula, Sequent
 import parsing
@@ -163,20 +163,46 @@ class ChildSequent(Sequent):
 # v:C, Gamma => Delta
 # v:(D AND E), Gamma => Delta
 
+ALL_VARIABLES = list(string.ascii_uppercase)
+
+def get_fresh_prop_variables(n : int, existing_variables : Iterable[str]):
+    if n == 0:
+        return []
+
+    variables = []
+    for variable in ALL_VARIABLES:
+        if variable not in existing_variables:
+            variables.append(variable)
+            if len(variables) == n:
+                break
+    if len(variables) < n:
+        raise Exception('Not enough variables')
+    return variables
 
 class Rule:
-    def __init__(self, name, root : Sequent, children : List[ChildSequent]):
+    def __init__(self, name, root : Sequent, children : List[ChildSequent] = None):
+        if children is None:
+            children = []
+
         self.name = name
         self.root = root
         self.children = children
-    
+
+    @property
+    def fresh_prop_variables(self):
+        children_variables = set()
+        for child in self.children:
+            children_variables |= child.prop_variables()
+
+        return children_variables - self.root.prop_variables()
+
     def apply(self, current_root : Sequent, rule_names : List[str]):
         matching_antecedent_sets = [s for s in utils.powerset(current_root.antecedents, True) if len(s) == len(self.root.antecedents)]
         matching_consequent_sets = [s for s in utils.powerset(current_root.consequents, True) if len(s) == len(self.root.consequents)]
         for antecedent_set in matching_antecedent_sets:
             for consequent_set in matching_consequent_sets:
                 specific_sequent = Sequent(antecedent_set, consequent_set)
-                matches = self.apply_specific(specific_sequent, rule_names)
+                matches = self.apply_specific(specific_sequent, current_root, rule_names)
                 # print('Matches:',matches)
 
                 if len(matches) > 0:
@@ -203,7 +229,7 @@ class Rule:
                     return root, [child.as_sequent() for child in final_children]
                     
 
-    def apply_specific(self, specific_sequent : Sequent, rule_names : List[str]) -> List[Tuple[Sequent, List[ChildSequent]]]:
+    def apply_specific(self, specific_sequent : Sequent, full_sequent : Sequent, rule_names : List[str]) -> List[Tuple[Sequent, List[ChildSequent]]]:
         known_labels = specific_sequent.labels()
         known_immediate_children = get_sequent_immediate_children(specific_sequent, rule_names)
         known_semantic_variables = specific_sequent.semantic_variables()
@@ -211,13 +237,21 @@ class Rule:
         # print('Immediate children:', known_immediate_children)
 
         unknown_labels = self.root.labels()
-        unknown_prop_variables = self.root.prop_variables()
+        unknown_prop_variables = self.root.prop_variables() - self.fresh_prop_variables
         unknown_semantic_variables = self.root.semantic_variables()
 
         # Match unknown with known
         label_pairings = utils.get_pairings(unknown_labels, known_labels)
         prop_variable_pairings = utils.get_pairings(unknown_prop_variables, known_immediate_children)
         semantic_variable_pairings = utils.get_pairings(unknown_semantic_variables, known_semantic_variables)
+
+        rule_children = self.children
+
+        # Handle fresh prop variables
+        stale_prop_variables = unknown_prop_variables | full_sequent.prop_variables()
+        new_prop_variables = get_fresh_prop_variables(len(self.fresh_prop_variables), stale_prop_variables)
+        fresh_prop_variable_pairing = [(unknown_fresh_prop_variable, new_prop_variable) for unknown_fresh_prop_variable, new_prop_variable in zip(self.fresh_prop_variables, new_prop_variables)]
+        rule_children = [replace_prop_variables(child, fresh_prop_variable_pairing) for child in rule_children]
 
         # print('==')
         # print(str(specific_sequent))
@@ -229,7 +263,7 @@ class Rule:
             for prop_variable_pairing in prop_variable_pairings:
                 for semantic_variable_pairing in semantic_variable_pairings:
                     adapted_root = self.root.clone()
-                    adapted_children = [child.clone() for child in self.children]
+                    adapted_children = [child.clone() for child in rule_children]
 
                     adapted_root = replace_labels(adapted_root, label_pairing)
                     adapted_children = [replace_labels(child, label_pairing) for child in adapted_children]

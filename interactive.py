@@ -21,15 +21,22 @@ SPLASH_SCREEN = """
 """
 
 HELP = """
+Sequents are in the form
+  label1:FORMULA1[, label2:FORMULA2...] => label3:FORMULA3[, label4:FORMULA4...]
+(for labelled formulas). Relations can be written as label1Rlabel2.
+
+Variables must be single-letter and uppercase (e.g. A, B...).
+Labels must be single-letter and lowercase (e.g. a, b...).
+
 Supported symbols:
-  AND (alternatively /\\, \\/)
-  OR (alternatively \\/, \\)
-  NOT (alternatively ~, -)
+  AND (alternatively /\\)
+  OR (alternatively \\/)
+  NOT (alternatively ~ or -)
   IMPLIES (alternatively ->)
   BOX (alternatively [])
   DIAMOND (alternatively <>)
   BOT (alternatively +)
-  R (alternatively SEES)
+  R (alternatively SEES) for relations
 
 Examples:
   w:A AND B, w:A -> B => w:A

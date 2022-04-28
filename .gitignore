@@ -1,3 +1,4 @@
 dist/__pycache__/**
 .antlr/**
 __pycache__/**
+build/**

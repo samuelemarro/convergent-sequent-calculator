@@ -1,19 +1,8 @@
-import platform
-import subprocess
-import sys
 
 import colorama
+from cross_platform import is_old_windows_cmd
 
 colorama.init()
-
-def check_cmd():
-    return subprocess.check_output('(dir 2>&1 *`|echo CMD);&<# rem #>echo PowerShell', shell=True)
-
-def is_cmd():
-    return sys.platform == 'win32' and check_cmd().decode('utf-8').startswith('CMD')
-
-def is_old_windows_cmd():
-    return is_cmd() and platform.release() != '10'
 
 class bcolors:
     if is_old_windows_cmd():

@@ -22,12 +22,11 @@ def main():
     else:
         print(bcolors.FAIL + 'Statement is not provable.' + bcolors.ENDC + '\n')
         msg = 'Counter-example: ' + '\n'
-        for antecedent in counterexample.antecedents:
+        for antecedent in set(counterexample.antecedents):
             msg += 'Set ' + str(antecedent) + ' to True' + '\n'
-        for i,consequent in enumerate(counterexample.consequents):
+        for i,consequent in enumerate(set(counterexample.consequents)):
             msg += 'Set ' + str(consequent) + ' to False' + ('\n' if i < len(counterexample.consequents) - 1 else '')
         print_msg_box(msg, indent=10)
-        
 
     print("_____PROOF_____")
     proof.print(False, "", True)

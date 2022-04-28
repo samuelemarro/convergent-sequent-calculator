@@ -20,8 +20,10 @@ class Node:
     def print(self, is_last, indent = "", is_root = False):
         kids = self.children
         item = ''
-        if self.rule_name in ['N/A', 'Loop']:
+        if self.rule_name == 'N/A':
             item = bcolors.FAIL + str(self.element) + bcolors.ENDC
+        elif self.rule_name == 'Loop':
+            item = bcolors.FAIL + str(self.element) + bcolors.ENDC + ' (Loop)'
         else:
             for i,antecedent in enumerate(self.element.antecedents):
                 if antecedent in self.main_sequent.antecedents:
@@ -41,7 +43,7 @@ class Node:
             item = indent + ('└╴' if is_last else '├╴') + item
             indent = indent + ('  ' if is_last else '│ ')
 
-        item = '{:<38} {:>12}'.format(item, bcolors.HEADER + (' (' + self.rule_name + ')' if self.rule_name != 'N/A' else '') + bcolors.ENDC)
+        item = '{:<38} {:>12}'.format(item, bcolors.HEADER + (' (' + self.rule_name + ')' if self.rule_name not in ['N/A', 'Loop'] else '') + bcolors.ENDC)
         if is_last and len(kids) == 0:
             item += '\n'
         print(item)

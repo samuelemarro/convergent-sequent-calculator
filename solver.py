@@ -11,7 +11,7 @@ def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : 
     rules = [rule_set if isinstance(rule_set, list) else [rule_set] for rule_set in rules]
     max_repetitions = max(
         [
-            max([(len(rule.root.prop_variables())) for rule in rule_set])
+            max([(max(len(rule.root.antecedents), len(rule.root.consequents))) for rule in rule_set])
         for rule_set in rules]
     )
     # Check for a loop

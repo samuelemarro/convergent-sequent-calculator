@@ -8,7 +8,7 @@ from rules import DEFAULT_RULES
 import parsing
 from printer import print_msg_box
 
-def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : List[str], previous_sequents : List[Sequent] = None) -> Node:
+def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], previous_sequents : List[Sequent] = None) -> Node:
     if previous_sequents is None:
         previous_sequents = []
 
@@ -25,7 +25,7 @@ def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : 
 
     for i, rule_set in enumerate(rules):
         for rule in rule_set:
-            result = rule.apply(sequent, rule_names)
+            result = rule.apply(sequent)
             if result is not None:
                 main_sequent, children = result
 
@@ -38,7 +38,7 @@ def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : 
                 new_rules = list(rules)
                 new_rules[i] = new_rule_set
 
-                return Node(sequent, rule.name, [solve(child, new_rules, rule_names, previous_sequents + [sequent]) for child in children], main_sequent)
+                return Node(sequent, rule.name, [solve(child, new_rules, previous_sequents + [sequent]) for child in children], main_sequent)
     return Node(sequent, 'N/A', [], Sequent([], []))
 
 
@@ -50,7 +50,7 @@ def visual_proof(sequent_string : str, rules = None):
 
     print(bcolors.UNDERLINE + str(sequent) + bcolors.ENDC)
 
-    proof = solve(sequent, rules, [])
+    proof = solve(sequent, rules)
 
     counterexample = proof.find_counterexample()
 

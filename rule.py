@@ -26,21 +26,21 @@ def replace_sequent_children(sequent : Sequent, multiset: str, index : int, star
     
     return Sequent(new_antecedents, new_consequents)
 
-def get_labelled_formula_immediate_children(labelled_formula : LabelledFormula, rule_names: List[str]):
-    return parsing.get_immediate_children_set(labelled_formula.formula, rule_names)
+def get_labelled_formula_immediate_children(labelled_formula : LabelledFormula):
+    return parsing.get_immediate_children_set(labelled_formula.formula)
 
-def get_sequent_immediate_children(sequent : Sequent, rule_names):
+def get_sequent_immediate_children(sequent : Sequent):
     # Merge the immediate children
     immediate_children = set()
     
     for antecedent in sequent.antecedents:
         if isinstance(antecedent, LabelledFormula):
-            antecedent_immediate_children = get_labelled_formula_immediate_children(antecedent, rule_names)
+            antecedent_immediate_children = get_labelled_formula_immediate_children(antecedent)
             immediate_children |= set(antecedent_immediate_children)
     
     for consequent in sequent.consequents:
         if isinstance(consequent, LabelledFormula):
-            consequent_immediate_children = get_labelled_formula_immediate_children(consequent, rule_names)
+            consequent_immediate_children = get_labelled_formula_immediate_children(consequent)
             immediate_children |= set(consequent_immediate_children)
 
     return immediate_children
@@ -227,13 +227,13 @@ class Rule:
 
         return children_labels - self.root.labels()
 
-    def apply(self, current_root : Sequent, rule_names : List[str]):
+    def apply(self, current_root : Sequent):
         matching_antecedent_sets = [s for s in utils.powerset(current_root.antecedents, True) if len(s) == len(self.root.antecedents)]
         matching_consequent_sets = [s for s in utils.powerset(current_root.consequents, True) if len(s) == len(self.root.consequents)]
         for antecedent_set in matching_antecedent_sets:
             for consequent_set in matching_consequent_sets:
                 specific_sequent = Sequent(antecedent_set, consequent_set)
-                matches = self.apply_specific(specific_sequent, current_root, rule_names)
+                matches = self.apply_specific(specific_sequent, current_root)
                 # print('Matches:',matches)
 
                 if len(matches) > 0:
@@ -260,9 +260,9 @@ class Rule:
                     return root, [child.as_sequent() for child in final_children]
                     
 
-    def apply_specific(self, specific_sequent : Sequent, full_sequent : Sequent, rule_names : List[str]) -> List[Tuple[Sequent, List[ChildSequent]]]:
+    def apply_specific(self, specific_sequent : Sequent, full_sequent : Sequent) -> List[Tuple[Sequent, List[ChildSequent]]]:
         known_labels = specific_sequent.labels()
-        known_immediate_children = get_sequent_immediate_children(specific_sequent, rule_names)
+        known_immediate_children = get_sequent_immediate_children(specific_sequent)
         known_semantic_variables = specific_sequent.semantic_variables()
 
         # print('Immediate children:', known_immediate_children)

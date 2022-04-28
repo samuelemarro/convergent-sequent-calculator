@@ -36,9 +36,9 @@ Allowed symbols:
 
 ### Examples
 
-* ```w:A AND B, w:A => B => w:A```
 * ```w:A /\ B, w R w => w:B, w:C```
 * ```w:[]A /\ B, w R w => w:B, w:C```
+* ```w:A AND B, w:A -> B => w:A```
 * ```w:DIAMOND A, u: BOX B => u:A```
 
 ## Usage

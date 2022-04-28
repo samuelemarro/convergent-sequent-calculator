@@ -1,8 +1,12 @@
 from typing import List, Union
 from base import Sequent
+from colors import bcolors
+import loop
 from proof import Node
 from rule import Rule
-import loop
+from rules import DEFAULT_RULES
+import parsing
+from printer import print_msg_box
 
 def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : List[str], previous_sequents : List[Sequent] = None) -> Node:
     if previous_sequents is None:
@@ -36,3 +40,30 @@ def solve(sequent: Sequent, rules : List[Union[Rule, List[Rule]]], rule_names : 
 
                 return Node(sequent, rule.name, [solve(child, new_rules, rule_names, previous_sequents + [sequent]) for child in children], main_sequent)
     return Node(sequent, 'N/A', [], Sequent([], []))
+
+
+def visual_proof(sequent_string : str, rules = None):
+    if rules is None:
+        rules = DEFAULT_RULES
+
+    sequent = parsing.parse_sequent(sequent_string)
+
+    print(bcolors.UNDERLINE + str(sequent) + bcolors.ENDC)
+
+    proof = solve(sequent, rules, [])
+
+    counterexample = proof.find_counterexample()
+
+    if counterexample is None:
+        print(bcolors.OKGREEN + 'Statement is provable.' + bcolors.ENDC + '\n')
+    else:
+        print(bcolors.FAIL + 'Statement is not provable.' + bcolors.ENDC + '\n')
+        msg = 'Counter-example: ' + '\n'
+        for antecedent in set(counterexample.antecedents):
+            msg += 'Set ' + str(antecedent) + ' to True' + '\n'
+        for i,consequent in enumerate(set(counterexample.consequents)):
+            msg += 'Set ' + str(consequent) + ' to False' + ('\n' if i < len(counterexample.consequents) - 1 else '')
+        print_msg_box(msg, indent=10)
+
+    print("_____PROOF_____")
+    proof.print(False, "", True)

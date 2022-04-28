@@ -1,8 +1,6 @@
 import sys
 
-from typing import List
-from antlr4 import CommonTokenStream, ParseTreeWalker, StdinStream, InputStream, ParserRuleContext
-from antlr4.tree.Tree import TerminalNodeImpl
+from antlr4 import CommonTokenStream, ParseTreeWalker, InputStream
 
 from dist.SequentCalculusLexer import SequentCalculusLexer
 

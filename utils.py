@@ -1,5 +1,4 @@
 import itertools
-from typing import Set
 
 def powerset(iterable, allow_empty):
     if allow_empty:

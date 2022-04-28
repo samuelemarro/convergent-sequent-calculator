@@ -1,4 +1,5 @@
 from typing import List, Union
+
 from base import Sequent
 from colors import bcolors
 import loop

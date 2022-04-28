@@ -1,9 +1,8 @@
 import re
-from typing import List
 
-from antlr4 import CommonTokenStream, ParseTreeWalker, StdinStream, InputStream
-from antlr4.tree.Tree import TerminalNodeImpl
-from base import Formula
+from antlr4 import CommonTokenStream, InputStream, ParseTreeWalker
+
+from base import Atom, Formula, LabelledFormula, Sequent
 
 from dist.SequentCalculusLexer import SequentCalculusLexer
 
@@ -78,3 +77,53 @@ def preprocess(_input):
     _input = re.sub('\s+', '', _input)
 
     return _input
+
+class TreeConverter(SequentCalculusListener):
+    def __init__(self):
+        self.is_antecedent = True
+        self.antecedents = []
+        self.consequents = []
+
+    def exitAntecedent(self, ctx: SequentCalculusParser.AntecedentContext):
+        self.is_antecedent = False
+    
+    def enterFormula(self, ctx: SequentCalculusParser.FormulaContext):
+        return super().enterFormula(ctx)
+
+    def enterLabelledFormula(self, ctx):
+        label = ctx.getChild(0).symbol.text
+        formula_text = ctx.getChild(2).getText()
+
+        labelled_formula = LabelledFormula(label, Formula(formula_text))
+    
+        if self.is_antecedent:
+            self.antecedents.append(labelled_formula)
+        else:
+            self.consequents.append(labelled_formula)
+    
+    def enterAtom(self, ctx: SequentCalculusParser.AtomContext):
+        label1 = ctx.getChild(0).symbol.text
+        label2 = ctx.getChild(2).symbol.text
+
+        atom = Atom(label1, label2)
+
+        if self.is_antecedent:
+            self.antecedents.append(atom)
+        else:
+            self.consequents.append(atom)
+
+def parse_sequent(sequent_text : str):
+    sequent_text = preprocess(sequent_text)
+
+    lexer = SequentCalculusLexer(InputStream(sequent_text))
+    stream = CommonTokenStream(lexer)
+    parser = SequentCalculusParser(stream)
+
+    tree = parser.sequent()
+    printer = TreeConverter()
+    walker = ParseTreeWalker()
+    walker.walk(printer, tree)
+
+    sequent = Sequent(printer.antecedents, printer.consequents)
+
+    return sequent

@@ -34,6 +34,8 @@ Allowed symbols:
 * `BOT` (alternatively `+`);
 * `R` (alternatively `SEES`) for relations.
 
+Note that operators are right-associative.
+
 ### Examples
 
 * ```w:A /\ B, w R w => w:B, w:C```

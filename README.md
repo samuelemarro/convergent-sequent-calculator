@@ -10,6 +10,8 @@ Python prover for sequent calculus.
 
 ### The philosopher's way
 
+Download the executable from the [Release page](https://github.com/samuelemarro/convergent-sequent-calculator/releases).
+
 ### The programmer's way
 
 ```

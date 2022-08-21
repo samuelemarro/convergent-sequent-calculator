@@ -1,5 +1,5 @@
 # Convergent Sequent Calculator (CSC)
-Python prover for sequent calculus.
+Python prover for [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus).
 
 ## Features
 - Support for modal logic
